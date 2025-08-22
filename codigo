@@ -1,0 +1,13 @@
+import java.util.Scanner;
+public class codigo {
+  public static void main(String[] args) {
+      Scanner scanner = new Scanner(System.in);
+      int[] arreglo  ={23,7,45,13,32};
+
+
+
+
+
+
+
+}
