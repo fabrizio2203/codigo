@@ -1,43 +1,26 @@
-import java.util.Random;
-import javax.swing.JOptionPane;
+import javax.swing.*;
+import java.util.*;
+import java.security.*;
 
-public class OrdenamientoBurbuja {
+public class HashSorting {
 
     public static void main(String[] args) {
-        int n = 5;
-        int[] datos = new int[n];
-        Random rand = new Random();
+        List<String> lista = generarListaAleatoria();
+        List<String> listaOriginal = new ArrayList<>(lista);
+        Map<Integer, List<String>> tablaHash = generarTablaHash(lista);
+        List<String> listaOrdenada = ordenarBucket(tablaHash);
+        Collections.sort(listaOrdenada); 
 
-        for (int i = 0; i < n; i++) {
-            datos[i] = rand.nextInt(100);
-        }
+        imprimirResultados(listaOriginal, listaOrdenada);
+        generarInformeDeTablaHash(tablaHash);
 
-        StringBuilder original = new StringBuilder("Arreglo original:\n");
-        for (int i = 0; i < n; i++) {
-            original.append(datos[i]).append(" ");
-        }
-
-        long inicio = System.currentTimeMillis();
-
-        for (int i = 0; i < n - 1; i++) {
-            for (int j = 0; j < n - i - 1; j++) {
-                if (datos[j] > datos[j + 1]) {
-                    int temp = datos[j];
-                    datos[j] = datos[j + 1];
-                    datos[j + 1] = temp;
-                }
-            }
-        }
-
-        long fin = System.currentTimeMillis();
-
-        StringBuilder ordenado = new StringBuilder("\n\nArreglo ordenado:\n");
-        for (int i = 0; i < n; i++) {
-            ordenado.append(datos[i]).append(" ");
-        }
-
-        JOptionPane.showMessageDialog(null,
-            original.toString() + ordenado.toString() +
-            "\n\nTiempo: " + (fin - inicio) + " ms");
+        String mensaje = generarReporte(listaOriginal, listaOrdenada);
+        mostrarCuadro(mensaje);
     }
-}
+
+    public static List<String> generarListaAleatoria() {
+        List<String> listaAleatoria = new ArrayList<>();
+        String[] frutas = {
+            "banana", "manzana", "cereza", "uva", "kiwi", "mango",
+            "fresa", "pera", "melón", "cantalupo", "durazno", "ciruela",
+   
