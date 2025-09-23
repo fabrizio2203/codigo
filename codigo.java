@@ -23,4 +23,10 @@ public class HashSorting {
         String[] frutas = {
             "banana", "manzana", "cereza", "uva", "kiwi", "mango",
             "fresa", "pera", "melón", "cantalupo", "durazno", "ciruela",
-   
+     };
+        for (String fruta : frutas) {
+            listaAleatoria.add(fruta);
+        }
+        Collections.shuffle(listaAleatoria);
+        return listaAleatoria;
+    }
