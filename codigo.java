@@ -30,3 +30,11 @@ public class HashSorting {
         Collections.shuffle(listaAleatoria);
         return listaAleatoria;
     }
+ public static Map<Integer, List<String>> generarTablaHash(List<String> lista) {
+        Map<Integer, List<String>> hashTable = new HashMap<>();
+        for (String item : lista) {
+            int hashValue = getHash(item);
+            hashTable.computeIfAbsent(hashValue, k -> new ArrayList<>()).add(item);
+        }
+        return hashTable;
+    }
