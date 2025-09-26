@@ -38,3 +38,12 @@ public class HashSorting {
         }
         return hashTable;
     }
+      public static List<String> ordenarBucket(Map<Integer, List<String>> hashTable) {
+        List<String> ordenada = new ArrayList<>();
+        for (Map.Entry<Integer, List<String>> entry : hashTable.entrySet()) {
+            List<String> bucket = entry.getValue();
+            Collections.sort(bucket); // Orden interno por bucket
+            ordenada.addAll(bucket);
+        }
+        return ordenada;
+    }
