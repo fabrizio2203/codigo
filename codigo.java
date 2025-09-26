@@ -47,3 +47,18 @@ public class HashSorting {
         }
         return ordenada;
     }
+    
+    public static int getHash(String item) {
+        int hashValue = 0;
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] hashBytes = md.digest(item.getBytes());
+            for (int i = 0; i < 4; i++) {
+                hashValue |= (hashBytes[i] & 0xFF) << (i * 8);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return hashValue;
+    }
+
