@@ -61,4 +61,15 @@ public class HashSorting {
         }
         return hashValue;
     }
-
+public static String generarReporte(List<String> original, List<String> ordenada) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Lista original:\n");
+        for (String item : original) {
+            sb.append(item).append(", ");
+        }
+        sb.append("\n\nLista ordenada alfabéticamente:\n");
+        for (String item : ordenada) {
+            sb.append(item).append(", ");
+        }
+        return sb.toString();
+    }
