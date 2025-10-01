@@ -76,3 +76,8 @@ public static String generarReporte(List<String> original, List<String> ordenada
     public static void mostrarCuadro(String mensaje) {
         JOptionPane.showMessageDialog(null, mensaje, "Resultado de Ordenación", JOptionPane.INFORMATION_MESSAGE);
     }
+    public static void imprimirResultados(List<String> original, List<String> ordenada) {
+        System.out.println("Lista original:");
+        for (String item : original) {
+            System.out.println(item);
+        }
