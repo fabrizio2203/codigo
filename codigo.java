@@ -9,7 +9,7 @@ public class HashSorting {
         List<String> listaOriginal = new ArrayList<>(lista);
         Map<Integer, List<String>> tablaHash = generarTablaHash(lista);
         List<String> listaOrdenada = ordenarBucket(tablaHash);
-        Collections.sort(listaOrdenada); 
+        Collections.sort(listaOrdenada); // ✅ Orden alfabético total
 
         imprimirResultados(listaOriginal, listaOrdenada);
         generarInformeDeTablaHash(tablaHash);
@@ -23,14 +23,17 @@ public class HashSorting {
         String[] frutas = {
             "banana", "manzana", "cereza", "uva", "kiwi", "mango",
             "fresa", "pera", "melón", "cantalupo", "durazno", "ciruela",
-     };
+            "higo", "sandía", "limón", "naranja", "pomelo", "granada",
+            "guayaba", "lichi"
+        };
         for (String fruta : frutas) {
             listaAleatoria.add(fruta);
         }
         Collections.shuffle(listaAleatoria);
         return listaAleatoria;
     }
- public static Map<Integer, List<String>> generarTablaHash(List<String> lista) {
+
+    public static Map<Integer, List<String>> generarTablaHash(List<String> lista) {
         Map<Integer, List<String>> hashTable = new HashMap<>();
         for (String item : lista) {
             int hashValue = getHash(item);
@@ -38,7 +41,8 @@ public class HashSorting {
         }
         return hashTable;
     }
-      public static List<String> ordenarBucket(Map<Integer, List<String>> hashTable) {
+
+    public static List<String> ordenarBucket(Map<Integer, List<String>> hashTable) {
         List<String> ordenada = new ArrayList<>();
         for (Map.Entry<Integer, List<String>> entry : hashTable.entrySet()) {
             List<String> bucket = entry.getValue();
@@ -47,7 +51,7 @@ public class HashSorting {
         }
         return ordenada;
     }
-    
+
     public static int getHash(String item) {
         int hashValue = 0;
         try {
@@ -61,7 +65,8 @@ public class HashSorting {
         }
         return hashValue;
     }
-public static String generarReporte(List<String> original, List<String> ordenada) {
+
+    public static String generarReporte(List<String> original, List<String> ordenada) {
         StringBuilder sb = new StringBuilder();
         sb.append("Lista original:\n");
         for (String item : original) {
@@ -73,15 +78,16 @@ public static String generarReporte(List<String> original, List<String> ordenada
         }
         return sb.toString();
     }
+
     public static void mostrarCuadro(String mensaje) {
         JOptionPane.showMessageDialog(null, mensaje, "Resultado de Ordenación", JOptionPane.INFORMATION_MESSAGE);
     }
+
     public static void imprimirResultados(List<String> original, List<String> ordenada) {
         System.out.println("Lista original:");
         for (String item : original) {
             System.out.println(item);
         }
- }
         System.out.println("\nLista ordenada alfabéticamente:");
         for (String item : ordenada) {
             System.out.println(item);
