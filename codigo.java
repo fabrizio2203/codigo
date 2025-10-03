@@ -81,3 +81,17 @@ public static String generarReporte(List<String> original, List<String> ordenada
         for (String item : original) {
             System.out.println(item);
         }
+ }
+        System.out.println("\nLista ordenada alfabéticamente:");
+        for (String item : ordenada) {
+            System.out.println(item);
+        }
+    }
+
+    public static void generarInformeDeTablaHash(Map<Integer, List<String>> tablaHash) {
+        System.out.println("\n--- Tabla Hash Generada ---");
+        for (Map.Entry<Integer, List<String>> entry : tablaHash.entrySet()) {
+            System.out.println("Hash: " + entry.getKey() + " → " + entry.getValue());
+        }
+    }
+}
