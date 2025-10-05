@@ -9,7 +9,7 @@ public class HashSorting {
         List<String> listaOriginal = new ArrayList<>(lista);
         Map<Integer, List<String>> tablaHash = generarTablaHash(lista);
         List<String> listaOrdenada = ordenarBucket(tablaHash);
-        Collections.sort(listaOrdenada); // ✅ Orden alfabético total
+        Collections.sort(listaOrdenada);
 
         imprimirResultados(listaOriginal, listaOrdenada);
         generarInformeDeTablaHash(tablaHash);
@@ -46,7 +46,7 @@ public class HashSorting {
         List<String> ordenada = new ArrayList<>();
         for (Map.Entry<Integer, List<String>> entry : hashTable.entrySet()) {
             List<String> bucket = entry.getValue();
-            Collections.sort(bucket); // Orden interno por bucket
+            Collections.sort(bucket);
             ordenada.addAll(bucket);
         }
         return ordenada;
@@ -101,4 +101,3 @@ public class HashSorting {
         }
     }
 }
-System.out.println("hola");
