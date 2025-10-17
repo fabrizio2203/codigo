@@ -19,7 +19,7 @@ public class BusquedaExterna {
             crearArchivoDatos();
         }
 
-        System.out.println("=== BUSQUEDA EXTERNA ===");
+        System.out.println(" BUSQUEDA EXTERNA ");
         System.out.print("Ingresa el ID a buscar (ej: ID50000): ");
         String valorBuscado = scanner.nextLine().trim();
 
