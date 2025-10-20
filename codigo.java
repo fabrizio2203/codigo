@@ -1,82 +1,153 @@
-package busquedaexterna;
+package hashsorting;
 
-import java.io.*;
-import java.util.Scanner;
+import java.util.*;
 
-public class BusquedaExterna {
-
-    static final String ARCHIVO_DATOS = "datos.txt";
-
-    static final int TOTAL_REGISTROS = 100_000;
-
-    static final int TAMANO_BLOQUE = 1000;
+/**
+ * Algoritmo Hash Sorting
+ * Autor: Alonso (Ejemplo educativo)
+ * Descripción:
+ * Este programa demuestra cómo ordenar una lista de cadenas
+ * utilizando una tabla hash (HashMap) para agruparlas
+ * antes de ordenarlas alfabéticamente.
+ */
+public class HashSorting {
 
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+        // Scanner para leer entrada del usuario
+        Scanner sc = new Scanner(System.in);
 
-        if (!new File(ARCHIVO_DATOS).exists()) {
-            System.out.println("Creando archivo de datos..");
-            crearArchivoDatos();
-        }
+        System.out.println("========== ALGORITMO HASH SORTING ==========");
+        System.out.print("Ingrese la cantidad de palabras a generar o ingresar: ");
+        int cantidad = sc.nextInt();
+        sc.nextLine(); // limpiar buffer
 
-        System.out.println(" BUSQUEDA EXTERNA ");
-        System.out.print("Ingresa el ID a buscar (ej: ID50000): ");
-        String valorBuscado = scanner.nextLine().trim();
+        System.out.println("¿Desea ingresar las palabras manualmente? (s/n): ");
+        String opcion = sc.nextLine();
 
-        boolean encontrado = buscarEnArchivo(valorBuscado);
+        List<String> listaPalabras;
 
-        if (encontrado) {
-            System.out.println(" Valor encontrado en el archivo.");
+        if (opcion.equalsIgnoreCase("s")) {
+            listaPalabras = leerPalabrasUsuario(cantidad, sc);
         } else {
-            System.out.println(" Valor No encontrado.");
+            listaPalabras = generarPalabrasAleatorias(cantidad);
         }
 
-        scanner.close();
+        System.out.println("\n--- Lista original ---");
+        imprimirLista(listaPalabras);
+
+        // Paso 1: Crear tabla hash
+        Map<Integer, List<String>> tablaHash = crearTablaHash(listaPalabras);
+
+        // Paso 2: Mostrar tabla hash creada
+        System.out.println("\n--- Tabla Hash Generada ---");
+        imprimirTablaHash(tablaHash);
+
+        // Paso 3: Ordenar cada bucket de la tabla
+        System.out.println("\n--- Ordenando Buckets... ---");
+        ordenarBuckets(tablaHash);
+
+        // Paso 4: Combinar todos los buckets
+        List<String> listaOrdenada = combinarBuckets(tablaHash);
+
+        // Paso 5: Orden alfabético final
+        Collections.sort(listaOrdenada);
+
+        System.out.println("\n--- Lista final ordenada ---");
+        imprimirLista(listaOrdenada);
+
+        // Paso 6: Mostrar comparación de tiempos
+        compararTiempos(listaPalabras);
+
+        System.out.println("\n========== FIN DEL PROGRAMA ==========");
     }
 
-    public static void crearArchivoDatos() {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(ARCHIVO_DATOS))) {
-            for (int i = 0; i < TOTAL_REGISTROS; i++) {
-                String registro = "ID" + i + ",Nombre_" + i;
-                writer.write(registro);
-                writer.newLine();
+    // Genera palabras aleatorias
+    public static List<String> generarPalabrasAleatorias(int cantidad) {
+        List<String> palabras = new ArrayList<>();
+        String letras = "abcdefghijklmnopqrstuvwxyz";
+        Random random = new Random();
+
+        for (int i = 0; i < cantidad; i++) {
+            int longitud = random.nextInt(5) + 3; // entre 3 y 7 letras
+            StringBuilder palabra = new StringBuilder();
+            for (int j = 0; j < longitud; j++) {
+                palabra.append(letras.charAt(random.nextInt(letras.length())));
             }
-            System.out.println("Archivo creado con " + TOTAL_REGISTROS + " registros.");
-        } catch (IOException e) {
-            System.err.println("Error al crear el archivo: " + e.getMessage());
+            palabras.add(palabra.toString());
+        }
+        return palabras;
+    }
+
+    // Permite al usuario ingresar palabras manualmente
+    public static List<String> leerPalabrasUsuario(int cantidad, Scanner sc) {
+        List<String> palabras = new ArrayList<>();
+        for (int i = 0; i < cantidad; i++) {
+            System.out.print("Ingrese palabra #" + (i + 1) + ": ");
+            palabras.add(sc.nextLine());
+        }
+        return palabras;
+    }
+
+    // Crea una tabla hash agrupando palabras según su código hash
+    public static Map<Integer, List<String>> crearTablaHash(List<String> palabras) {
+        Map<Integer, List<String>> tabla = new HashMap<>();
+
+        for (String palabra : palabras) {
+            int hash = palabra.hashCode() % 10; // agrupación por módulo
+            tabla.putIfAbsent(hash, new ArrayList<>());
+            tabla.get(hash).add(palabra);
+        }
+        return tabla;
+    }
+
+    // Ordena las listas dentro de cada bucket
+    public static void ordenarBuckets(Map<Integer, List<String>> tabla) {
+        for (Map.Entry<Integer, List<String>> entrada : tabla.entrySet()) {
+            Collections.sort(entrada.getValue());
         }
     }
 
-    public static boolean buscarEnArchivo(String valor) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(ARCHIVO_DATOS))) {
-            String[] bloque = new String[TAMANO_BLOQUE];
-            int index = 0;
-            String linea;
-            int totalLeidos = 0;
-            int bloquesLeidos = 0;
+    // Combina todos los buckets en una lista final
+    public static List<String> combinarBuckets(Map<Integer, List<String>> tabla) {
+        List<String> resultado = new ArrayList<>();
+        for (List<String> bucket : tabla.values()) {
+            resultado.addAll(bucket);
+        }
+        return resultado;
+    }
 
-            while ((linea = reader.readLine()) != null) {
-                bloque[index++] = linea;
-                totalLeidos++;
+    // Imprime la tabla hash
+    public static void imprimirTablaHash(Map<Integer, List<String>> tabla) {
+        for (Map.Entry<Integer, List<String>> entrada : tabla.entrySet()) {
+            System.out.println("Hash " + entrada.getKey() + " → " + entrada.getValue());
+        }
+    }
 
-                if (index == TAMANO_BLOQUE || totalLeidos == TOTAL_REGISTROS) {
-                    bloquesLeidos++;
-                    System.out.println("Leyendo bloque #" + bloquesLeidos);
+    // Imprime una lista de palabras
+    public static void imprimirLista(List<String> lista) {
+        for (String palabra : lista) {
+            System.out.println(" - " + palabra);
+        }
+    }
 
-                    for (int i = 0; i < index; i++) {
-                        if (bloque[i].startsWith(valor + ",")) {
-                            System.out.println("Registro: " + bloque[i]);
-                            return true;
-                        }
-                    }
-                    index = 0;
-                }
+    // Mide el tiempo de ordenamiento con HashSorting vs Collections.sort
+    public static void compararTiempos(List<String> lista) {
+        List<String> copia1 = new ArrayList<>(lista);
+        List<String> copia2 = new ArrayList<>(lista);
+
+        long inicioHash = System.nanoTime();
+        Map<Integer, List<String>> tabla = crearTablaHash(copia1);
+        ordenarBuckets(tabla);
+        List<String> listaOrdenada = combinarBuckets(tabla);
+        Collections.sort(listaOrdenada);
+        long finHash = System.nanoTime();
+
+        long inicioSort = System.nanoTime();
+        Collections.sort(copia2);
+        long finSort = System.nanoTime();
+
+        System.out.println("\n--- Comparación de tiempos ---");
+        System.out.println("HashSorting: " + (finHash - inicioHash) + " ns");
+        System.out.println("Collections.sort: " + (finSort - inicioSort) + " ns");
+    }
             }
-        } catch (IOException e) {
-            System.err.println("Error al leer el archivo: " + e.getMessage());
-        }
-
-        return false;
-    }
-}
-
